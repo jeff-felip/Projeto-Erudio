@@ -5,10 +5,20 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class sumController {
 
-    @GetMapping("/soma/{nunOne}/{nunTwo}")
+    @GetMapping("/sum/{nunOne}/{nunTwo}")
     @ResponseBody
-    private Double soma(@PathVariable Double nunOne, @PathVariable Double nunTwo){System.out.println(nunOne +" + "+nunTwo+" = "+(nunOne+nunTwo));
-        return (nunOne + nunTwo);
+    private String soma(@PathVariable Double nunOne, @PathVariable Double nunTwo, @RequestParam String operation){
+        if(operation.equals(".")){
+            return nunOne+" + "+nunTwo+" = "+(nunOne+nunTwo);
+        }else if(operation.equals("-")){
+            return nunOne+" - "+nunTwo+" = "+(nunOne - nunTwo);
+        }else if(operation.equals("*")){
+            return nunOne+" * "+nunTwo+" = "+(nunOne * nunTwo);
+        }else if(operation.equals("/")){
+            return nunOne+" / "+nunTwo+" = "+(nunOne / nunTwo);
+        }else{
+            return "ERRO: Operação não encontrada!";
+        }
     }
 
 
