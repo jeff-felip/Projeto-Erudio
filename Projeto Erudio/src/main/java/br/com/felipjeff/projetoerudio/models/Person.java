@@ -15,7 +15,7 @@ public class Person {
     private Long id;
 
     @Column(name = "fist_name", length = 80, nullable = false)
-    private String fistName;
+    private String firstName;
 
     @Column(name = "last_name", length = 80, nullable = false)
     private String lastName;
@@ -26,8 +26,8 @@ public class Person {
     @Column(name = "gender", length = 6, nullable = false)
     private String gender;
 
-    public Person(String fistName, String lastName, String address, String gender) {
-        this.fistName = fistName;
+    public Person(String firstName, String lastName, String address, String gender) {
+        this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.gender = gender;

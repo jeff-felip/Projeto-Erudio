@@ -1,6 +1,8 @@
 package br.com.felipjeff.projetoerudio.services;
 
+import br.com.felipjeff.projetoerudio.data.vo.v1.PersonVO;
 import br.com.felipjeff.projetoerudio.exceptions.ResourceNotFoundException;
+import br.com.felipjeff.projetoerudio.mapper.DozerMapper;
 import br.com.felipjeff.projetoerudio.models.Person;
 import br.com.felipjeff.projetoerudio.reporitories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,32 +15,36 @@ public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
-    public Person buscarPessoaPorID(Long Id) throws Exception{
-        return personRepository.findById(Id).orElseThrow(
+    public PersonVO buscarPessoaPorID(Long Id) throws Exception{
+
+        var Pessoa= personRepository.findById(Id) .orElseThrow(
                 () -> new ResourceNotFoundException("ERRO: Pessoa com Encontrada com o id informado!"));
+        return DozerMapper.parseObject(Pessoa, PersonVO.class);
     }
 
-    public List<Person> buscarTodasAsPessoas() throws Exception{
-        return personRepository.findAll();
+    public List<PersonVO> buscarTodasAsPessoas() throws Exception{
+        return DozerMapper.parseListObjects(personRepository.findAll(), PersonVO.class);
     }
 
-    public Person salvarPessoa(Person person)throws Exception{
-        return personRepository.save(person);
+    public PersonVO salvarPessoa(PersonVO person)throws Exception{
+        var entity = DozerMapper.parseObject(person, Person.class);
+        return DozerMapper.parseObject(personRepository.save(entity), PersonVO.class);
+
     }
 
-    public Person ApagarPessoaPorID(Long Id)throws Exception{
+    public PersonVO ApagarPessoaPorID(Long Id)throws Exception{
         var personApagada = buscarPessoaPorID(Id);
         personRepository.deleteById(Id);
         return personApagada;
     }
 
-    public Person AtualizarPessoaPorId(Long id, Person person) throws Exception{
-        Person pessoa = buscarPessoaPorID(id);
+    public PersonVO AtualizarPessoaPorId(Long id, PersonVO person) throws Exception{
+        PersonVO pessoa = buscarPessoaPorID(id);
         pessoa.setLastName(person.getLastName());
-        pessoa.setFistName(person.getFistName());
+        pessoa.setFirstName(person.getFirstName());
         pessoa.setAddress(person.getAddress());
         pessoa.setGender(person.getGender());
-        return personRepository.save(pessoa);
+        return salvarPessoa(pessoa);
     }
 
 
